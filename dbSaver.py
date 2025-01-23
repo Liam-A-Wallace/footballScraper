@@ -21,13 +21,29 @@ def saveToDb(data,db_name):
         #pts INTEGER
         #pts per match played REAL
         #last 5 TEXT
-        #Attendance (This has a comma in the number may need to clean can i sort a string?) INTEGER
-        #top scorer string with number wonder if i can split it somehow TEXT AND INTEGER
+        #Attendance INTEGER
+        #top scorer  TEXT
         #simply goalkeeper name INTEGER
 
         cursor.execute('''
         CREATE TABLE IF NOT EXISTS league_Table_SP (
-        PlaceHolder
+            LeaguePosition INTEGER NOT NULL,
+            Team TEXT PRIMARY KEY,
+            MatchesPlayed INTEGER,
+            Won INTEGER,
+            Draw INTEGER,
+            Lost INTEGER,
+            GoalsFor INTEGER,
+            GoalsAgainst INTEGER,
+            GoalDifference INTEGER,
+            Points INTEGER,
+            PointsPerMatch REAL,
+            Last5 TEXT,
+            Attendance INTEGER,
+            TopScorer TEXT,
+            Goalkeeper Text
+
+
         )
         
         ''')
