@@ -1,11 +1,11 @@
-#program to save the data to a csv file intended to take in data and a filename and turn the resulting data into a csv
+#program to save the data to a sqlite 3 db
 import sqlite3
 
 def saveToDb(data,db_name):
     #add logic here to ensure rows is correct columns
     try:
         sqliteConnection = sqlite3.connect(db_name)
-        cursor = conn.cursor
+        cursor = sqliteConnection.cursor()
         print("DB Init")
 
         #COLS with data type
@@ -31,7 +31,7 @@ def saveToDb(data,db_name):
             Team TEXT PRIMARY KEY,
             MatchesPlayed INTEGER,
             Won INTEGER,
-            Draw INTEGER,
+            Drawn INTEGER,
             Lost INTEGER,
             GoalsFor INTEGER,
             GoalsAgainst INTEGER,
@@ -50,8 +50,32 @@ def saveToDb(data,db_name):
 
         #logic to handle updates
         #pos team name etc are placeholders CHANGE
-        for position, team_name, points in rows:
-            cursor.execute('''league_Table_SP (pos)''')
+        for row in data:
+            cursor.execute('''
+            INSERT INTO league_Table_SP (
+                LeaguePosition, Team, MatchesPlayed, Won, Drawn, Lost, 
+                GoalsFor, GoalsAgainst, GoalDifference, Points, 
+                PointsPerMatch, Last5, Attendance, TopScorer, Goalkeeper
+            )
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            ON CONFLICT(Team) DO UPDATE SET
+                LeaguePosition=excluded.LeaguePosition,
+                MatchesPlayed=excluded.MatchesPlayed,
+                Won=excluded.Won,
+                Drawn=excluded.Drawn,
+                Lost=excluded.Lost,
+                GoalsFor=excluded.GoalsFor,
+                GoalsAgainst=excluded.GoalsAgainst,
+                GoalDifference=excluded.GoalDifference,
+                Points=excluded.Points,
+                PointsPerMatch=excluded.PointsPerMatch,
+                Last5=excluded.Last5,
+                Attendance=excluded.Attendance,
+                TopScorer=excluded.TopScorer,
+                Goalkeeper=excluded.Goalkeeper
+             ''',row)
+            sqliteConnection.commit()
+            print("Data saved")
     except sqlite3.Error as error:
         print("Error occured: ", error)
     finally:
