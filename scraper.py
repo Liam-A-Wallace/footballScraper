@@ -72,10 +72,11 @@ def teamUrlFindr():
     return cleanUrls
 
 def clubScraper(urls):
+    rows = []
     for url in urls:
         time.sleep(random.uniform(6,9))
         # Making a GET request
-        playerUrls = []
+        
         r = requests.get(url)
 
         # check status code for response received
@@ -87,28 +88,11 @@ def clubScraper(urls):
         soup = BeautifulSoup(r.content, 'html.parser')
         
         table = soup.find('table',{'id': 'stats_standard_40'})
-        #find all instances of a within table
-        links = table.find_all('a')
-        for link in links:
-            #appends every link to the url list
-            playerUrls.append(link.get('href'))
+        if not table:
+            print("Table not found")
+            return None
         
-        #clean data
-        print(playerUrls)
-        cleanPlayerUrls = urlCleaner(playerUrls,'players')
-        print(cleanPlayerUrls)
-        #scrape stats
-        playerScraper(cleanPlayerUrls)
-        #save TODO
-        
-#scrape stats then send somewhere else to store still working on that in league table stats
-#ADD DELAY LIKE CLUB SCRAPER
-def playerScraper(urls):
 
-    for url in urls:
-        time.sleep(random.uniform(6,9))
-        r = requests.get(url)
-        print(f"{r.status_code} {url}")
 
  
     

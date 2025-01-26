@@ -1,36 +1,51 @@
 import time 
 import sys
 from scraper import *
-from csvSaver import saveToCsv
-from dbSaver import saveToDb
+from csvSaver import saveToCsvLeague
+from dbSaver import saveToLeagueDb
 from cleaner import cleanLeagueData
 
 
 #start of program
 start = time.time()
-db_name = "league_data.db"
+
+#initialising database names
+league_db_name = "league_data.db"
+player_db_name = "player_data.db"
 
 print("Welcome")
+#user choice of saving info as csv or database
 saveChoice = input("Would you like to save this info to a csv or db? ").strip().lower()
 #scrape all the league table info
 headers, rows = leagueScrape()
 
+urls = teamUrlFindr()
 
+
+#scrape all the player info here
+
+#and additional check for player scraping data maybe an AND
 if not rows:
     print("Error scraping")
     sys.exit()
-print(rows)
-clean_L_Data = cleanLeagueData(rows)
 
+clean_L_Data = cleanLeagueData(rows)
+#clean the player data where possible
+
+
+
+
+#add one for player data
 if not clean_L_Data:
     print("No valid data")
     sys.exit()
 
+#add one for each for league and data
 if saveChoice == "csv":
     file_name = input("Enter a filename: ").strip()
-    saveToCsv(clean_L_Data, file_name)
+    saveToCsvLeague(clean_L_Data, file_name)
 elif saveChoice == "db":
-    saveToDb(clean_L_Data,db_name)
+    saveToLeagueDb(clean_L_Data,league_db_name)
 else:
     print("Invalid choice exiting")
 

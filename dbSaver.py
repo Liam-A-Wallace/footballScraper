@@ -1,7 +1,7 @@
 #program to save the data to a sqlite 3 db
 import sqlite3
 
-def saveToDb(data,db_name):
+def saveToLeagueDb(data,db_name):
     #add logic here to ensure rows is correct columns
     try:
         sqliteConnection = sqlite3.connect(db_name)

@@ -1,6 +1,6 @@
 import csv
 
-def saveToCsv(data, file_name):
+def saveToCsvLeague(data, file_name):
     if not data:
         print("No data to save.")
         return
