@@ -67,7 +67,7 @@ def cleanPlayerData(raw_data):
         if "Age" in data:
             data["Age"] =data["Age"].split("-")[0]
         
-        matches_key = list(data.keys())[-1]
+        matches_key = list(data.keys())[-2]
         del data[matches_key]
 
 

@@ -71,9 +71,11 @@ def teamUrlFindr():
     cleanUrls = urlCleaner(urls,"squads")
     return cleanUrls
 
-def clubScraper(urls):
+def clubScraper(urls,leagueData):
     headers = []
     playerData = []
+    urlIndex = 0
+    
 
     for url in urls:
         time.sleep(random.uniform(6,9))
@@ -94,12 +96,6 @@ def clubScraper(urls):
             print(f"Table not found on {url}")
             continue
 
-        # Extract the club name from the URL
-        # For example: "Heart-of-Midlothian-Stats" becomes "Heart of Midlothian"
-        club_part = url.split('/')[-1]  # gets the last part of the URL
-        club_name = club_part.replace("Stats", "")  # remove "Stats"
-        club_name = club_name.replace("-", " ")  # replace hyphens with spaces
-        club_name = club_name.strip()  # remove any extra whitespace
 
         if not headers:
             all_rows = table.find('thead').find_all('tr')  
@@ -130,8 +126,9 @@ def clubScraper(urls):
             if len(cols) != len(headers) -1:
                 continue
             player_dict = {headers[i]: cols[i].text.strip() for i in range(len(cols))}
-            player_dict["Club"] = club_name
+            player_dict["Club"] = leagueData[urlIndex][0]
             playerData.append(player_dict)
+        urlIndex +=1
             
     
     return headers, playerData

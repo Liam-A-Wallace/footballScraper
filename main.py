@@ -19,12 +19,13 @@ saveChoice = input("Would you like to save this info to a csv or db? ").strip().
 #scrape all the league table info
 headers, leagueData = leagueScrape()
 
+# Filter out rows with an empty club name (first column)
+leagueData = [row for row in leagueData if row[0].strip()]
 
 urls = teamUrlFindr()
 
-
 #scrape all the player info here
-headers, playerData = clubScraper(urls)
+headers, playerData = clubScraper(urls,leagueData)
 
 if not leagueData or not playerData:
     print("Error scraping")
