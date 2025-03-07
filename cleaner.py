@@ -47,12 +47,10 @@ def cleanLeagueData(rawLeague):
 
     return cleanData
 
-## drop players with zero appearances
-# remove matches column,
-# remove days from age
+
+
 # maybe think of a way to better represent nationality dict
 # what to do with players with multiple positions not sure
-# change mins to a straight int remove commas
 #   dont understand the 90s col
 #create a function for each cleaning process because dear lord
 def cleanPlayerData(raw_data):
@@ -66,6 +64,11 @@ def cleanPlayerData(raw_data):
 
             if data["Min"].isdigit():
                 data["Min"] = int(data["Min"])
+        if "Age" in data:
+            data["Age"] =data["Age"].split("-")[0]
+        
+        matches_key = list(data.keys())[-1]
+        del data[matches_key]
 
 
         cleanData.append(data)
