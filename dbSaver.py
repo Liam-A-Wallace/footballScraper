@@ -84,7 +84,6 @@ def saveToDbLeague(data,db_name):
             print("Connection Closed")
 
 
-import sqlite3
 
 def saveToDbPlayer(data, db_name):
     try:
@@ -116,7 +115,9 @@ def saveToDbPlayer(data, db_name):
             "Ast (Per 90)" REAL,
             "G+A (Per 90)" REAL,
             "G-PK (Per 90)" REAL,
-            "G+A-PK" REAL
+            "G+A-PK" REAL,
+            "Team" TEXT,
+            FOREIGN KEY (Team) REFERENCES league_Table_SP(Team)
         )
         ''')
 
@@ -126,9 +127,9 @@ def saveToDbPlayer(data, db_name):
             INSERT INTO player_data (
                 "Player", "Nation", "Pos", "Age", "MP", "Starts", "Min", "90s",
                 "Gls", "Ast", "G+A", "G-PK", "PK", "PKatt", "CrdY", "CrdR",
-                "Gls (Per 90)", "Ast (Per 90)", "G+A (Per 90)", "G-PK (Per 90)", "G+A-PK"
+                "Gls (Per 90)", "Ast (Per 90)", "G+A (Per 90)", "G-PK (Per 90)", "G+A-PK", "Team"
             )
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             ON CONFLICT("Player") DO UPDATE SET
                 "Nation"=excluded."Nation",
                 "Pos"=excluded."Pos",
@@ -149,12 +150,13 @@ def saveToDbPlayer(data, db_name):
                 "Ast (Per 90)"=excluded."Ast (Per 90)",
                 "G+A (Per 90)"=excluded."G+A (Per 90)",
                 "G-PK (Per 90)"=excluded."G-PK (Per 90)",
-                "G+A-PK"=excluded."G+A-PK"
+                "G+A-PK"=excluded."G+A-PK",
+                "Team"=excluded."Team"
             ''', (
                 row["Player"], row["Nation"], row["Pos"], row["Age"], row["MP"], row["Starts"],
                 row["Min"], row["90s"], row["Gls"], row["Ast"], row["G+A"], row["G-PK"],
                 row["PK"], row["PKatt"], row["CrdY"], row["CrdR"], row["Gls (Per 90)"],
-                row["Ast (Per 90)"], row["G+A (Per 90)"], row["G-PK (Per 90)"], row["G+A-PK"]
+                row["Ast (Per 90)"], row["G+A (Per 90)"], row["G-PK (Per 90)"], row["G+A-PK"], row["Club"]
             ))
 
         sqliteConnection.commit()

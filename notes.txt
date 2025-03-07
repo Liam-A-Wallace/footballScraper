@@ -2,7 +2,7 @@ Stage 1 (Scraping):
 Mostly complete
 
 will want to get around to scraping the other tables in player stats
-
+NEW PROBLEM players that have played for 2 teams will be stored under the 2nd team in ranks
 Stage 2 (Storing):
 league table storing is adequte for both csv and database
 
