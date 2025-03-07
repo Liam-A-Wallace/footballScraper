@@ -72,7 +72,9 @@ def teamUrlFindr():
     return cleanUrls
 
 def clubScraper(urls):
-    rows = []
+    headers = []
+    playerData = []
+
     for url in urls:
         time.sleep(random.uniform(6,9))
         # Making a GET request
@@ -89,8 +91,22 @@ def clubScraper(urls):
         
         table = soup.find('table',{'id': 'stats_standard_40'})
         if not table:
-            print("Table not found")
-            return None
+            print(f"Table not found on {url}")
+            continue
+
+        if not headers:
+            all_rows = table.find('thead').find_all('tr')
+            if len(all_rows)>1:
+                header_row = all_rows[1]
+                headers = [th.text.strip() for th in header_row.find_all('th')]
+            else:
+                print("No valid header found.")
+                continue
+        print(headers)
+        
+    
+    
+    return headers, playerData
         
 
 

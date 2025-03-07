@@ -82,3 +82,7 @@ def saveToLeagueDb(data,db_name):
         if sqliteConnection:
             sqliteConnection.close()
             print("Connection Closed")
+
+def saveToDbPlayer(data,file_name):
+    if not data:
+        return

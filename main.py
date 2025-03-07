@@ -10,8 +10,8 @@ from cleaner import cleanLeagueData
 start = time.time()
 
 #initialising database names
-league_db_name = "league_data.db"
-player_db_name = "player_data.db"
+LEAGUE_DB_NAME = "league_data.db"
+PLAYER_DB_NAME = "player_data.db"
 
 print("Welcome")
 #user choice of saving info as csv or database
@@ -19,12 +19,13 @@ saveChoice = input("Would you like to save this info to a csv or db? ").strip().
 #scrape all the league table info
 headers, rows = leagueScrape()
 
+
 urls = teamUrlFindr()
 
 
 #scrape all the player info here
+headers, rows = clubScraper(urls)
 
-#and additional check for player scraping data maybe an AND
 if not rows:
     print("Error scraping")
     sys.exit()
@@ -49,12 +50,6 @@ elif saveChoice == "db":
 else:
     print("Invalid choice exiting")
 
-#####FOCUSING ON FIRST SETTING UP STORAGE OF LEAGUE DATA
-#finds all the clubs urls
-#urls = teamUrlFindr()
-
-#also need to scrape all the player info prob need to do that whenever im looking through each club
-#clubScraper(urls)
 
 #calculate runtime
 end = time.time()
@@ -66,6 +61,13 @@ print(runtime)
 
 ## identify clubs by their club name and identify players using their url page hopefully it should show up somewhere in their personal page
 
-#most likely store using sqlLite need to define schemas asnd shit tho
+
+
+
+
+
+
+
+
 #maybe do some flask?
 #use matplot for creating graphs
