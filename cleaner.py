@@ -57,3 +57,8 @@ def cleanLeagueData(rawLeague):
 # there is a bug regarding goals/90 and goals
 def cleanPlayerData(raw_data):
     cleanData = []
+    for data in raw_data[0:]:
+        data[6] = data[6].replace(",","")
+
+        cleanData.append(data)
+    return cleanData

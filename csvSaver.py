@@ -28,6 +28,7 @@ def saveToCsvLeague(data, file_name):
     except Exception as e:
         print(f"An error occurred while saving to CSV: {e}")
 
+
 def saveToCsvPlayer(data, file_name):
     if not data:
         print("No data to save.")

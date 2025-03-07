@@ -123,10 +123,7 @@ def clubScraper(urls):
                 continue
             player_dict = {headers[i]: col[i].text.strip() for i in range(len(headers))}
             playerData.append(player_dict)
-            #print(player_dict)
-            #print(playerData)
-            #print(url)
-    
+            
     
     return headers, playerData
         
