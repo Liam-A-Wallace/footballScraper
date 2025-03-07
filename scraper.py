@@ -94,6 +94,13 @@ def clubScraper(urls):
             print(f"Table not found on {url}")
             continue
 
+        # Extract the club name from the URL
+        # For example: "Heart-of-Midlothian-Stats" becomes "Heart of Midlothian"
+        club_part = url.split('/')[-1]  # gets the last part of the URL
+        club_name = club_part.replace("Stats", "")  # remove "Stats"
+        club_name = club_name.replace("-", " ")  # replace hyphens with spaces
+        club_name = club_name.strip()  # remove any extra whitespace
+
         if not headers:
             all_rows = table.find('thead').find_all('tr')  
             if len(all_rows) > 1:  
@@ -115,13 +122,15 @@ def clubScraper(urls):
                         unique_headers.append(header)
 
                 headers = unique_headers  # Store unique headers
+                headers.append("Club")
         
         tbody = table.find('tbody')
         for row in tbody.find_all('tr'):
-            col = row.find_all(['th','td'])
-            if len(col) != len(headers):
+            cols = row.find_all(['th','td'])
+            if len(cols) != len(headers) -1:
                 continue
-            player_dict = {headers[i]: col[i].text.strip() for i in range(len(headers))}
+            player_dict = {headers[i]: cols[i].text.strip() for i in range(len(cols))}
+            player_dict["Club"] = club_name
             playerData.append(player_dict)
             
     
