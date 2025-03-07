@@ -47,3 +47,13 @@ def cleanLeagueData(rawLeague):
 
     return cleanData
 
+## drop players with zero appearances
+# remove matches column,
+# remove days from age
+# maybe think of a way to better represent nationality dict
+# what to do with players with multiple positions not sure
+# change mins to a straight int remove commas
+#   dont understand the 90s col
+# there is a bug regarding goals/90 and goals
+def cleanPlayerData(raw_data):
+    cleanData = []

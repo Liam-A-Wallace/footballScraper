@@ -95,15 +95,37 @@ def clubScraper(urls):
             continue
 
         if not headers:
-            all_rows = table.find('thead').find_all('tr')
-            if len(all_rows)>1:
-                header_row = all_rows[1]
-                headers = [th.text.strip() for th in header_row.find_all('th')]
-            else:
-                print("No valid header found.")
-                continue
-        print(headers)
+            all_rows = table.find('thead').find_all('tr')  
+            if len(all_rows) > 1:  
+                header_row = all_rows[1]  # Select the second row (actual headers)
+                
+                raw_headers = [th.text.strip() for th in header_row.find_all('th')]
+
+                # Fix duplicate column names by adding section names
+                unique_headers = []
+                header_count = {}
+
+                for header in raw_headers:
+                    if header in header_count:
+                        header_count[header] += 1
+                        if header_count[header] == 2:
+                            unique_headers.append(f"{header} (Per 90)")
+                    else:
+                        header_count[header] = 1
+                        unique_headers.append(header)
+
+                headers = unique_headers  # Store unique headers
         
+        tbody = table.find('tbody')
+        for row in tbody.find_all('tr'):
+            col = row.find_all(['th','td'])
+            if len(col) != len(headers):
+                continue
+            player_dict = {headers[i]: col[i].text.strip() for i in range(len(headers))}
+            playerData.append(player_dict)
+            #print(player_dict)
+            #print(playerData)
+            #print(url)
     
     
     return headers, playerData

@@ -1,7 +1,7 @@
 import time 
 import sys
 from scraper import *
-from csvSaver import saveToCsvLeague
+from csvSaver import *
 from dbSaver import saveToLeagueDb
 from cleaner import cleanLeagueData
 
@@ -43,8 +43,10 @@ if not clean_L_Data:
 
 #add one for each for league and data
 if saveChoice == "csv":
-    file_name = input("Enter a filename: ").strip()
-    saveToCsvLeague(clean_L_Data, file_name)
+    file_name_l = input("Enter a filename for the league data CSV: ").strip()
+    saveToCsvLeague(clean_L_Data, file_name_l)
+    file_name_p = input("Enter a filename for the player data CSV: ").strip()
+    saveToCsvPlayer(playerData, file_name_p)
 elif saveChoice == "db":
     saveToLeagueDb(clean_L_Data,LEAGUE_DB_NAME)
 else:
