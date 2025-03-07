@@ -37,7 +37,7 @@ clean_P_Data = cleanPlayerData(playerData)
 
 
 
-#add one for player data
+
 if not clean_L_Data or not clean_P_Data:
     print("No valid data")
     sys.exit()
@@ -49,7 +49,8 @@ if saveChoice == "csv":
     file_name_p = input("Enter a filename for the player data CSV: ").strip()
     saveToCsvPlayer(clean_P_Data, file_name_p)
 elif saveChoice == "db":
-    saveToLeagueDb(clean_L_Data,LEAGUE_DB_NAME)
+    saveToDbLeague(clean_L_Data,LEAGUE_DB_NAME)
+    saveToDbPlayer(clean_P_Data,PLAYER_DB_NAME)
 else:
     print("Invalid choice exiting")
 
@@ -61,8 +62,6 @@ runtime = (end-start)
 #print total runtime out of curiousity
 print(runtime)
 
-
-## identify clubs by their club name and identify players using their url page hopefully it should show up somewhere in their personal page
 
 
 

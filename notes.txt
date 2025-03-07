@@ -1,0 +1,19 @@
+Stage 1 (Scraping):
+Mostly complete
+
+will want to get around to scraping the other tables in player stats
+
+Stage 2 (Storing):
+league table storing is adequte for both csv and database
+
+player stats able to be stored in csv with some flaws
+database not able to store yet
+missing some key stats for goalkeepers and other misc stats that could provide better analysis
+
+curious if linking the tables would provide any benefit i guess so
+splitting outfielders with goalkeepers? (apparently not)
+Stage 3 (Visualising):
+Not Started
+
+Stage 4 (Flask and web product):
+Not Started

@@ -56,7 +56,7 @@ def cleanLeagueData(rawLeague):
 def cleanPlayerData(raw_data):
     cleanData = []
     for data in raw_data:
-        if "MP" in data and data["MP"] == "0":
+        if "MP" in data and data["MP"] == "0" and data["Pos"] != "GK":
             continue
 
         if "Min" in data:

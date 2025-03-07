@@ -1,7 +1,7 @@
 #program to save the data to a sqlite 3 db
 import sqlite3
 
-def saveToLeagueDb(data,db_name):
+def saveToDbLeague(data,db_name):
     #add logic here to ensure rows is correct columns
     try:
         sqliteConnection = sqlite3.connect(db_name)
@@ -83,6 +83,86 @@ def saveToLeagueDb(data,db_name):
             sqliteConnection.close()
             print("Connection Closed")
 
-def saveToDbPlayer(data,file_name):
-    if not data:
-        return
+
+import sqlite3
+
+def saveToDbPlayer(data, db_name):
+    try:
+        # Establish the SQLite database connection
+        sqliteConnection = sqlite3.connect(db_name)
+        cursor = sqliteConnection.cursor()
+        print("DB Init")
+
+        # Create the player_data table with columns matching the CSV headers exactly.
+        cursor.execute('''
+        CREATE TABLE IF NOT EXISTS player_data (
+            "Player" TEXT PRIMARY KEY,
+            "Nation" TEXT,
+            "Pos" TEXT,
+            "Age" INTEGER,
+            "MP" INTEGER,
+            "Starts" INTEGER,
+            "Min" INTEGER,
+            "90s" REAL,
+            "Gls" INTEGER,
+            "Ast" INTEGER,
+            "G+A" INTEGER,
+            "G-PK" INTEGER,
+            "PK" INTEGER,
+            "PKatt" INTEGER,
+            "CrdY" INTEGER,
+            "CrdR" INTEGER,
+            "Gls (Per 90)" REAL,
+            "Ast (Per 90)" REAL,
+            "G+A (Per 90)" REAL,
+            "G-PK (Per 90)" REAL,
+            "G+A-PK" REAL
+        )
+        ''')
+
+        # Insert each row from the cleaned dictionary into the database.
+        for row in data:
+            cursor.execute('''
+            INSERT INTO player_data (
+                "Player", "Nation", "Pos", "Age", "MP", "Starts", "Min", "90s",
+                "Gls", "Ast", "G+A", "G-PK", "PK", "PKatt", "CrdY", "CrdR",
+                "Gls (Per 90)", "Ast (Per 90)", "G+A (Per 90)", "G-PK (Per 90)", "G+A-PK"
+            )
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            ON CONFLICT("Player") DO UPDATE SET
+                "Nation"=excluded."Nation",
+                "Pos"=excluded."Pos",
+                "Age"=excluded."Age",
+                "MP"=excluded."MP",
+                "Starts"=excluded."Starts",
+                "Min"=excluded."Min",
+                "90s"=excluded."90s",
+                "Gls"=excluded."Gls",
+                "Ast"=excluded."Ast",
+                "G+A"=excluded."G+A",
+                "G-PK"=excluded."G-PK",
+                "PK"=excluded."PK",
+                "PKatt"=excluded."PKatt",
+                "CrdY"=excluded."CrdY",
+                "CrdR"=excluded."CrdR",
+                "Gls (Per 90)"=excluded."Gls (Per 90)",
+                "Ast (Per 90)"=excluded."Ast (Per 90)",
+                "G+A (Per 90)"=excluded."G+A (Per 90)",
+                "G-PK (Per 90)"=excluded."G-PK (Per 90)",
+                "G+A-PK"=excluded."G+A-PK"
+            ''', (
+                row["Player"], row["Nation"], row["Pos"], row["Age"], row["MP"], row["Starts"],
+                row["Min"], row["90s"], row["Gls"], row["Ast"], row["G+A"], row["G-PK"],
+                row["PK"], row["PKatt"], row["CrdY"], row["CrdR"], row["Gls (Per 90)"],
+                row["Ast (Per 90)"], row["G+A (Per 90)"], row["G-PK (Per 90)"], row["G+A-PK"]
+            ))
+
+        sqliteConnection.commit()
+        print("Data saved")
+
+    except sqlite3.Error as error:
+        print("Error occurred:", error)
+    finally:
+        if sqliteConnection:
+            sqliteConnection.close()
+            print("Connection Closed")
