@@ -17,20 +17,20 @@ print("Welcome")
 #user choice of saving info as csv or database
 saveChoice = input("Would you like to save this info to a csv or db? ").strip().lower()
 #scrape all the league table info
-headers, rows = leagueScrape()
+headers, leagueData = leagueScrape()
 
 
 urls = teamUrlFindr()
 
 
 #scrape all the player info here
-headers, rows = clubScraper(urls)
+headers, playerData = clubScraper(urls)
 
-if not rows:
+if not leagueData or not playerData:
     print("Error scraping")
     sys.exit()
 
-clean_L_Data = cleanLeagueData(rows)
+clean_L_Data = cleanLeagueData(leagueData)
 #clean the player data where possible
 
 
@@ -46,7 +46,7 @@ if saveChoice == "csv":
     file_name = input("Enter a filename: ").strip()
     saveToCsvLeague(clean_L_Data, file_name)
 elif saveChoice == "db":
-    saveToLeagueDb(clean_L_Data,league_db_name)
+    saveToLeagueDb(clean_L_Data,LEAGUE_DB_NAME)
 else:
     print("Invalid choice exiting")
 
