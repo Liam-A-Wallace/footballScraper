@@ -54,11 +54,19 @@ def cleanLeagueData(rawLeague):
 # what to do with players with multiple positions not sure
 # change mins to a straight int remove commas
 #   dont understand the 90s col
-# there is a bug regarding goals/90 and goals
+#create a function for each cleaning process because dear lord
 def cleanPlayerData(raw_data):
     cleanData = []
-    for data in raw_data[0:]:
-        data[6] = data[6].replace(",","")
+    for data in raw_data:
+        if "MP" in data and data["MP"] == "0":
+            continue
+
+        if "Min" in data:
+            data["Min"] = data["Min"].replace(",","").replace('"',"").strip()
+
+            if data["Min"].isdigit():
+                data["Min"] = int(data["Min"])
+
 
         cleanData.append(data)
     return cleanData
