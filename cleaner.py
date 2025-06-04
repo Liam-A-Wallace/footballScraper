@@ -47,3 +47,29 @@ def cleanLeagueData(rawLeague):
 
     return cleanData
 
+
+
+# maybe think of a way to better represent nationality dict
+# what to do with players with multiple positions not sure
+#   dont understand the 90s col
+#create a function for each cleaning process because dear lord
+def cleanPlayerData(raw_data):
+    cleanData = []
+    for data in raw_data:
+        if "MP" in data and data["MP"] == "0" and data["Pos"] != "GK":
+            continue
+
+        if "Min" in data:
+            data["Min"] = data["Min"].replace(",","").replace('"',"").strip()
+
+            if data["Min"].isdigit():
+                data["Min"] = int(data["Min"])
+        if "Age" in data:
+            data["Age"] =data["Age"].split("-")[0]
+        
+        matches_key = list(data.keys())[-2]
+        del data[matches_key]
+
+
+        cleanData.append(data)
+    return cleanData

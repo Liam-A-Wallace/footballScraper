@@ -71,8 +71,12 @@ def teamUrlFindr():
     cleanUrls = urlCleaner(urls,"squads")
     return cleanUrls
 
-def clubScraper(urls):
-    rows = []
+def clubScraper(urls,leagueData):
+    headers = []
+    playerData = []
+    urlIndex = 0
+    
+
     for url in urls:
         time.sleep(random.uniform(6,9))
         # Making a GET request
@@ -89,8 +93,45 @@ def clubScraper(urls):
         
         table = soup.find('table',{'id': 'stats_standard_40'})
         if not table:
-            print("Table not found")
-            return None
+            print(f"Table not found on {url}")
+            continue
+
+
+        if not headers:
+            all_rows = table.find('thead').find_all('tr')  
+            if len(all_rows) > 1:  
+                header_row = all_rows[1]  # Select the second row (actual headers)
+                
+                raw_headers = [th.text.strip() for th in header_row.find_all('th')]
+
+                # Fix duplicate column names by adding section names
+                unique_headers = []
+                header_count = {}
+
+                for header in raw_headers:
+                    if header in header_count:
+                        header_count[header] += 1
+                        if header_count[header] == 2:
+                            unique_headers.append(f"{header} (Per 90)")
+                    else:
+                        header_count[header] = 1
+                        unique_headers.append(header)
+
+                headers = unique_headers  # Store unique headers
+                headers.append("Club")
+        
+        tbody = table.find('tbody')
+        for row in tbody.find_all('tr'):
+            cols = row.find_all(['th','td'])
+            if len(cols) != len(headers) -1:
+                continue
+            player_dict = {headers[i]: cols[i].text.strip() for i in range(len(cols))}
+            player_dict["Club"] = leagueData[urlIndex][0]
+            playerData.append(player_dict)
+        urlIndex +=1
+            
+    
+    return headers, playerData
         
 
 

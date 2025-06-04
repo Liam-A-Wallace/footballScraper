@@ -1,60 +1,60 @@
 import time 
 import sys
 from scraper import *
-from csvSaver import saveToCsvLeague
-from dbSaver import saveToLeagueDb
-from cleaner import cleanLeagueData
+from csvSaver import *
+from dbSaver import *
+from cleaner import *
 
 
 #start of program
 start = time.time()
 
 #initialising database names
-league_db_name = "league_data.db"
-player_db_name = "player_data.db"
+LEAGUE_DB_NAME = "league_data.db"
+PLAYER_DB_NAME = "player_data.db"
 
 print("Welcome")
 #user choice of saving info as csv or database
 saveChoice = input("Would you like to save this info to a csv or db? ").strip().lower()
 #scrape all the league table info
-headers, rows = leagueScrape()
+headers, leagueData = leagueScrape()
+
+# Filter out rows with an empty club name (first column)
+leagueData = [row for row in leagueData if row[0].strip()]
 
 urls = teamUrlFindr()
 
-
 #scrape all the player info here
+headers, playerData = clubScraper(urls,leagueData)
 
-#and additional check for player scraping data maybe an AND
-if not rows:
+if not leagueData or not playerData:
     print("Error scraping")
     sys.exit()
 
-clean_L_Data = cleanLeagueData(rows)
+clean_L_Data = cleanLeagueData(leagueData)
 #clean the player data where possible
+clean_P_Data = cleanPlayerData(playerData)
 
 
 
 
-#add one for player data
-if not clean_L_Data:
+
+if not clean_L_Data or not clean_P_Data:
     print("No valid data")
     sys.exit()
 
 #add one for each for league and data
 if saveChoice == "csv":
-    file_name = input("Enter a filename: ").strip()
-    saveToCsvLeague(clean_L_Data, file_name)
+    file_name_l = input("Enter a filename for the league data CSV: ").strip()
+    saveToCsvLeague(clean_L_Data, file_name_l)
+    file_name_p = input("Enter a filename for the player data CSV: ").strip()
+    saveToCsvPlayer(clean_P_Data, file_name_p)
 elif saveChoice == "db":
-    saveToLeagueDb(clean_L_Data,league_db_name)
+    saveToDbLeague(clean_L_Data,LEAGUE_DB_NAME)
+    saveToDbPlayer(clean_P_Data,PLAYER_DB_NAME)
 else:
     print("Invalid choice exiting")
 
-#####FOCUSING ON FIRST SETTING UP STORAGE OF LEAGUE DATA
-#finds all the clubs urls
-#urls = teamUrlFindr()
-
-#also need to scrape all the player info prob need to do that whenever im looking through each club
-#clubScraper(urls)
 
 #calculate runtime
 end = time.time()
@@ -64,8 +64,13 @@ runtime = (end-start)
 print(runtime)
 
 
-## identify clubs by their club name and identify players using their url page hopefully it should show up somewhere in their personal page
 
-#most likely store using sqlLite need to define schemas asnd shit tho
+
+
+
+
+
+
+
 #maybe do some flask?
 #use matplot for creating graphs
