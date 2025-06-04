@@ -29,10 +29,10 @@ def cleanLeagueData(rawLeague):
             continue
         
         # Only keep the first 14 columns
-        row = row[:14]
+        row = row[:13]
 
         # Skip rows with less than 14 elements (invalid rows)
-        if len(row) < 14:
+        if len(row) < 13:
             continue
 
         # Insert rank (position) at the start of the row
@@ -40,7 +40,7 @@ def cleanLeagueData(rawLeague):
         row.insert(0, rank)
 
         #removing the commas from attendance
-        row[12] = row[12].replace(",","")
+        row[11] = row[11].replace(",","")
 
         # Add the cleaned row to the cleanData list
         cleanData.append(row)

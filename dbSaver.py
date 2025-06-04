@@ -38,14 +38,10 @@ def saveToLeagueDb(data,db_name):
             GoalDifference INTEGER,
             Points INTEGER,
             PointsPerMatch REAL,
-            Last5 TEXT,
             Attendance INTEGER,
             TopScorer TEXT,
-            Goalkeeper Text
-
-
+            Goalkeeper TEXT
         )
-        
         ''')
 
         #logic to handle updates
@@ -55,9 +51,9 @@ def saveToLeagueDb(data,db_name):
             INSERT INTO league_Table_SP (
                 LeaguePosition, Team, MatchesPlayed, Won, Drawn, Lost, 
                 GoalsFor, GoalsAgainst, GoalDifference, Points, 
-                PointsPerMatch, Last5, Attendance, TopScorer, Goalkeeper
+                PointsPerMatch, Attendance, TopScorer, Goalkeeper
             )
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             ON CONFLICT(Team) DO UPDATE SET
                 LeaguePosition=excluded.LeaguePosition,
                 MatchesPlayed=excluded.MatchesPlayed,
@@ -69,11 +65,10 @@ def saveToLeagueDb(data,db_name):
                 GoalDifference=excluded.GoalDifference,
                 Points=excluded.Points,
                 PointsPerMatch=excluded.PointsPerMatch,
-                Last5=excluded.Last5,
                 Attendance=excluded.Attendance,
                 TopScorer=excluded.TopScorer,
                 Goalkeeper=excluded.Goalkeeper
-             ''',row)
+            ''', row)
             sqliteConnection.commit()
             print("Data saved")
     except sqlite3.Error as error:
