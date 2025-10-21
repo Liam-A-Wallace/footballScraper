@@ -1,6 +1,4 @@
 
-Stage 3 (Visualising):
-Not Started
 
 Stage 4 (Flask and web product):
 Not Started
